@@ -1,20 +1,21 @@
+{% extends "base.html" %}
 
-<h1>Car Form</h1>
+{% block title %}Car Form{% endblock %}
 
-<form method="POST">
+{% block header %}
+<a href="{% url 'car_list' %}" class="button secondary">Back to List</a>
+{% endblock %}
 
-    {% csrf_token %}
+{% block content %}
+<section class="panel form-panel">
+    <h1 class="section-title">Car Form</h1>
+    <form method="POST" class="form-stack">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="button primary">Save</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
 
-    {{ form.as_p }}
-
-    <button type="submit">
-        Save
-    </button>
-
-</form>
-
-<br>
-
-<a href="{% url 'car_list' %}">
-    Back
-</a>

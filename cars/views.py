@@ -1,8 +1,6 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 
-from django.contrib.auth.forms import UserCreationForm
-
 from django.contrib.auth import (
     login,
     logout,
@@ -13,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.core.paginator import Paginator
 
-from .forms import CarForm
+from .forms import CarForm, SimpleSignupForm
 
 from .models import Car
 
@@ -22,7 +20,7 @@ def signup_view(request):
 
     if request.method == 'POST':
 
-        form = UserCreationForm(request.POST)
+        form = SimpleSignupForm(request.POST)
 
         if form.is_valid():
 
@@ -34,7 +32,7 @@ def signup_view(request):
 
     else:
 
-        form = UserCreationForm()
+        form = SimpleSignupForm()
 
     return render(
         request,

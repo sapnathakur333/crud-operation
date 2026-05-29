@@ -1,163 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Cars</title>
+{% extends "base.html" %}
 
-    <style>
+{% block title %}My Cars{% endblock %}
 
-        body{
-            font-family: Arial;
-            background:#f4f4f4;
-            padding:40px;
-        }
+{% block header %}
+<a href="{% url 'car_create' %}" class="button primary">Add Car</a>
+<a href="{% url 'logout' %}" class="button secondary">Logout</a>
+{% endblock %}
 
-        .top{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:30px;
-        }
-
-        .btn{
-            padding:10px 20px;
-            background:black;
-            color:white;
-            text-decoration:none;
-            border-radius:5px;
-        }
-
-        .card{
-            background:white;
-            padding:20px;
-            margin-bottom:20px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .edit{
-            background:green;
-        }
-
-        .delete{
-            background:red;
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-    <div class="top">
-
-        <h1>My Cars</h1>
-
-        <div>
-
-            <a href="{% url 'car_create' %}" class="btn">
-                Add Car
-            </a>
-
-            <a href="{% url 'logout' %}" class="btn">
-                Logout
-            </a>
-
-        </div>
-
-    </div>
-    <form method="GET" style="margin-bottom:30px;">
-
-    <input
-        type="text"
-        name="q"
-        placeholder="Search name, color, model, price"
-        value="{{ request.GET.q }}"
-        style="
-            padding:10px;
-            width:300px;
-            border-radius:5px;
-            border:1px solid gray;
-        "
-    >
-
-    <button
-        type="submit"
-        class="btn"
-        style="border:none;"
-    >
-        Search
-    </button>
-
-</form>
-
-
-    {% for car in page_obj %}
-
-        <div class="card">
-
-            <h2>{{ car.car_name }}</h2>
-
-            <p>
-                <b>Model:</b>
-                {{ car.car_model }}
-            </p>
-
-            <p>
-                <b>Price:</b>
-                ₹{{ car.car_price }}
-            </p>
-
-            <p>
-                <b>Color:</b>
-                {{ car.car_color }}
-            </p>
-
-            <a href="{% url 'car_edit' car.id %}" class="btn edit">
-                Edit
-            </a>
-
-            <a href="{% url 'car_delete' car.id %}" class="btn delete">
-                Delete
-            </a>
-
-        </div>
-
-    {% empty %}
-
-        <h2>No Cars Added</h2>
-
-    {% endfor %}
-
-
+{% block content %}
+<section class="panel">
     <div>
-
-        {% if page_obj.has_previous %}
-
-            <a href="?page=1">First</a>
-
-            <a href="?page={{ page_obj.previous_page_number }}">
-                Previous
-            </a>
-
-        {% endif %}
-
-
-        <span>
-            Page {{ page_obj.number }}
-            of
-            {{ page_obj.paginator.num_pages }}
-        </span>
-
-
-        {% if page_obj.has_next %}
-
-            <a href="?page={{ page_obj.next_page_number }}">
-                Next
-            </a>
-
-        {% endif %}
-
+        <h1 class="section-title">My Cars</h1>
+        <p class="section-copy">Manage your collection, search by name, model, color or price, and keep your inventory current.</p>
     </div>
 
-</body>
-</html>
+    <form method="GET" class="search-form">
+        <div class="form-group">
+            <input
+                type="text"
+                name="q"
+                placeholder="Search name, color, model, price"
+                value="{{ request.GET.q }}"
+                class="text-input"
+            >
+        </div>
+        <button type="submit" class="button primary">Search</button>
+    </form>
+</section>
+
+{% if page_obj %}
+<div class="grid-list">
+    {% for car in page_obj %}
+    <article class="card">
+        <h2 class="card-title">{{ car.car_name }}</h2>
+        <ul class="meta-list">
+            <li><strong>Model</strong><span>{{ car.car_model }}</span></li>
+            <li><strong>Price</strong><span>₹{{ car.car_price }}</span></li>
+            <li><strong>Color</strong><span>{{ car.car_color }}</span></li>
+        </ul>
+        <div class="card-actions">
+            <a href="{% url 'car_edit' car.id %}" class="button small tertiary">Edit</a>
+            <a href="{% url 'car_delete' car.id %}" class="button small danger">Delete</a>
+        </div>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+        <h2>No Cars Added</h2>
+        <p>Add your first car to start managing your inventory.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

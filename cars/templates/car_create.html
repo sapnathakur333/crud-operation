@@ -1,13 +1,21 @@
-<h1>Add Car</h1>
+{% extends "base.html" %}
 
-<form method="POST">
+{% block title %}Add Car{% endblock %}
 
-    {% csrf_token %}
+{% block header %}
+<a href="{% url 'car_list' %}" class="button secondary">Back to List</a>
+{% endblock %}
 
-    {{ form.as_p }}
-
-    <button type="submit">
-        Save
-    </button>
-
-</form>
+{% block content %}
+<section class="panel form-panel">
+    <h1 class="section-title">Add Car</h1>
+    <p class="section-copy">Enter the vehicle details below to save a new car into your collection.</p>
+    <form method="POST" class="form-stack">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="button primary">Save Car</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
