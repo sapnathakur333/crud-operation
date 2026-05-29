@@ -1,0 +1,20 @@
+
+<h1>Car Form</h1>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Save
+    </button>
+
+</form>
+
+<br>
+
+<a href="{% url 'car_list' %}">
+    Back
+</a>
